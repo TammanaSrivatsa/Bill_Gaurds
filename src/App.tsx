@@ -92,6 +92,7 @@ import VendorPurchaseOrders from "@/pages/VendorPurchaseOrders";
 import FinancePurchaseOrders from "@/pages/FinancePurchaseOrders";
 import React from "react";
 import { App as CapacitorApp } from "@capacitor/app";
+import SplashScreen from "@/components/SplashScreen";
 
 const queryClient = new QueryClient();
 
@@ -153,16 +154,28 @@ const AppContent = () => {
   );
 };
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <HashRouter>
-      <AuthProvider>
-        <AttendanceProvider>
-          <AppContent />
-        </AttendanceProvider>
-      </AuthProvider>
-    </HashRouter>
-  </QueryClientProvider>
-);
+const App = () => {
+  const [showSplash, setShowSplash] = React.useState(true);
+
+  if (showSplash) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <SplashScreen onFinish={() => setShowSplash(false)} />
+      </QueryClientProvider>
+    );
+  }
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <HashRouter>
+        <AuthProvider>
+          <AttendanceProvider>
+            <AppContent />
+          </AttendanceProvider>
+        </AuthProvider>
+      </HashRouter>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
