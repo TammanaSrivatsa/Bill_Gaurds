@@ -3,6 +3,7 @@ import { API_BASE_URL } from "@/config";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { 
   Search, 
   ArrowUpDown, 
