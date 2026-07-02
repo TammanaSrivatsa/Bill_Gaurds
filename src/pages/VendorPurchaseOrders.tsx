@@ -88,54 +88,37 @@ function ViewItemsModal({
         <DialogHeader>
           <DialogTitle className="text-sm font-mono">{order.po_id}</DialogTitle>
         </DialogHeader>
-        <div className="mt-2 border rounded-lg overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-muted/50 border-b text-muted-foreground">
-                <th className="text-left py-2 px-3 font-medium">Item</th>
-                <th className="text-left py-2 px-3 font-medium">Details</th>
-                <th className="text-center py-2 px-2 font-medium">Qty</th>
-                {hasPrice && <th className="text-right py-2 px-3 font-medium">Unit Price</th>}
-                {hasPrice && <th className="text-right py-2 px-3 font-medium">Total</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {order.items.map((item, i) => (
-                <tr key={i} className="border-b last:border-0">
-                  <td className="py-2 px-3 font-medium">{item.item}</td>
-                  <td className="py-2 px-3 text-muted-foreground text-xs">
-                    {item.specification ?? item.description ?? "—"}
-                    {item.category && (
-                      <span className="ml-1 text-muted-foreground/60">· {item.category}</span>
-                    )}
-                  </td>
-                  <td className="py-2 px-2 text-center">{item.quantity}</td>
-                  {hasPrice && (
-                    <td className="py-2 px-3 text-right">
-                      {item.unit_price !== undefined ? formatCurrency(item.unit_price) : "—"}
-                    </td>
+        <div className="mt-2 space-y-2">
+          {order.items.map((item, i) => (
+            <div key={i} className="border rounded-lg p-3 text-sm space-y-1">
+              <div className="flex items-start justify-between gap-2">
+                <span className="font-medium">{item.item}</span>
+                <span className="text-muted-foreground shrink-0">x{item.quantity}</span>
+              </div>
+              {(item.specification ?? item.description) && (
+                <p className="text-xs text-muted-foreground">
+                  {item.specification ?? item.description}
+                  {item.category && <span className="ml-1 text-muted-foreground/60">· {item.category}</span>}
+                </p>
+              )}
+              {hasPrice && (
+                <div className="flex items-center gap-4 pt-1 text-xs">
+                  {item.unit_price !== undefined && (
+                    <span>Unit Price: <span className="font-medium">{formatCurrency(item.unit_price)}</span></span>
                   )}
-                  {hasPrice && (
-                    <td className="py-2 px-3 text-right font-medium">
-                      {item.total_price !== undefined ? formatCurrency(item.total_price) : "—"}
-                    </td>
+                  {item.total_price !== undefined && (
+                    <span>Total: <span className="font-medium">{formatCurrency(item.total_price)}</span></span>
                   )}
-                </tr>
-              ))}
-            </tbody>
-            {hasPrice && order.total_po_amount > 0 && (
-              <tfoot>
-                <tr className="bg-muted/30 border-t">
-                  <td colSpan={hasPrice ? 4 : 3} className="py-2 px-3 text-right font-semibold text-sm">
-                    Grand Total
-                  </td>
-                  <td className="py-2 px-3 text-right font-bold">
-                    {formatCurrency(order.total_po_amount)}
-                  </td>
-                </tr>
-              </tfoot>
-            )}
-          </table>
+                </div>
+              )}
+            </div>
+          ))}
+          {hasPrice && order.total_po_amount > 0 && (
+            <div className="flex justify-between items-center border rounded-lg p-3 bg-muted/30 text-sm font-bold">
+              <span>Grand Total</span>
+              <span>{formatCurrency(order.total_po_amount)}</span>
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
@@ -510,23 +493,7 @@ export default function VendorPurchaseOrders() {
                   </div>
                   {isExpanded && (
                     <div className="border-t px-4 py-3 bg-muted/20 space-y-3">
-                      {order.items.length > 0 && (
-                        <div className="space-y-1.5">
-                          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Items</p>
-                          {order.items.map((item, i) => (
-                            <div key={i} className="flex items-center justify-between text-xs bg-background rounded-lg px-3 py-2">
-                              <div className="min-w-0 flex-1">
-                                <p className="font-medium truncate">{item.item}</p>
-                                {(item.specification ?? item.description) && (
-                                  <p className="text-muted-foreground truncate">{item.specification ?? item.description}</p>
-                                )}
-                              </div>
-                              <span className="shrink-0 ml-2 text-muted-foreground">x{item.quantity}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      <div className="flex gap-2 pt-1">
+                      <div className="flex gap-2">
                         <Button
                           size="sm"
                           variant="outline"
