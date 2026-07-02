@@ -1,7 +1,12 @@
-import { describe, it, expect } from "vitest";
+import { Capacitor } from "@capacitor/core";
+import { describe, it, expect, vi } from "vitest";
+import { getSplashDuration } from "../components/SplashScreen";
 
-describe("example", () => {
-  it("should pass", () => {
-    expect(true).toBe(true);
+describe("splash timing", () => {
+  it("keeps the native mobile splash visible longer than the web splash", () => {
+    vi.spyOn(Capacitor, "isNativePlatform").mockReturnValue(true);
+
+    const mobileDuration = getSplashDuration();
+    expect(mobileDuration).toBeGreaterThan(1500);
   });
 });

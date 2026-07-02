@@ -1,9 +1,14 @@
+import { Capacitor } from "@capacitor/core";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface SplashScreenProps {
   onFinish: () => void;
+}
+
+export function getSplashDuration() {
+  return Capacitor.isNativePlatform() ? 4000 : 1500;
 }
 
 export default function SplashScreen({ onFinish }: SplashScreenProps) {
@@ -13,7 +18,7 @@ export default function SplashScreen({ onFinish }: SplashScreenProps) {
     const timer = setTimeout(() => {
       setShow(false);
       setTimeout(onFinish, 500);
-    }, 2000);
+    }, getSplashDuration());
     return () => clearTimeout(timer);
   }, [onFinish]);
 
